@@ -1,0 +1,20 @@
+version: "2"
+services:
+
+  insight-ui:
+    image: insight-nginx
+    restart: always
+    expose:
+      - "80"
+    
+
+  insight-wrapper:
+    image: insight-blkidx
+    restart: always
+    expose: 
+      - "3000"
+
+networks:    
+  default:
+    external:
+      name: insight-network
