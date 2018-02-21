@@ -5,7 +5,8 @@ import (
     "github.com/gertjaap/blockchain-indexer-insight/logging"
 	"github.com/gertjaap/blockchain-indexer-insight/routes"
 	"github.com/googollee/go-socket.io"
-    "net/http"
+	"github.com/gorilla/mux"
+	"net/http"
     "os"
 )
 
@@ -34,12 +35,17 @@ func main() {
 
 	http.Handle("/socket.io/", server)
 	
-	http.HandleFunc("/sync", routes.Sync)
-	http.HandleFunc("/version", routes.Version)
-	http.HandleFunc("/status", routes.Status)
-	http.HandleFunc("/peer", routes.Peer)
-	http.HandleFunc("/blocks", routes.Blocks)
+	r := mux.NewRouter();
+
+	r.HandleFunc("/sync", routes.Sync)
+	r.HandleFunc("/version", routes.Version)
+	r.HandleFunc("/status", routes.Status)
+	r.HandleFunc("/peer", routes.Peer)
+	r.HandleFunc("/blocks", routes.Blocks)
+	r.HandleFunc("/block/{hash}", routes.Block)
+	r.HandleFunc("/txs", routes.Txs)
 	
+	http.Handle("/", r);
 	
 	listenErr := http.ListenAndServe(":3000", nil)
     if listenErr != nil {
