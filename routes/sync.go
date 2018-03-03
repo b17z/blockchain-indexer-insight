@@ -2,7 +2,9 @@ package routes
 
 import (
 	"encoding/json"
-    "net/http"
+	"github.com/gertjaap/blockchain-indexer-insight/config"
+	"github.com/gertjaap/blockchain-indexer-insight/logging"
+	"net/http"
 )
 
 type SyncResponse struct {
@@ -14,9 +16,33 @@ type SyncResponse struct {
 }
 
 func Sync(w http.ResponseWriter, req *http.Request) {
-	sync := SyncResponse{1000, "", 1000, "completed", 100.0}
+	
+	config := config.GetConfiguration()
+	url := config.BackendBaseUrl + "sync"
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		logging.Error.Println("NewRequest: ", err)
+		return
+	}
 
-	js, err := json.Marshal(sync)
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		logging.Error.Println("Do: ", err)
+		return
+	}
+
+	defer resp.Body.Close()
+
+	var record SyncResponse
+
+	if err := json.NewDecoder(resp.Body).Decode(&record); err != nil {
+		logging.Error.Println("Json decode failed: ", err)
+		return
+	}
+
+	js, err := json.Marshal(record)
 	if err != nil {
 	  http.Error(w, err.Error(), http.StatusInternalServerError)
 	  return

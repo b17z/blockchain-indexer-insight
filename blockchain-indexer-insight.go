@@ -2,7 +2,8 @@ package main
 
 import (
 	"encoding/json"
-    "github.com/gertjaap/blockchain-indexer-insight/logging"
+    "github.com/gertjaap/blockchain-indexer-insight/config"
+	"github.com/gertjaap/blockchain-indexer-insight/logging"
 	"github.com/gertjaap/blockchain-indexer-insight/models"
 	"github.com/gertjaap/blockchain-indexer-insight/routes"
 	"github.com/googollee/go-socket.io"
@@ -82,7 +83,11 @@ func main() {
 		for range blockTicker.C {
             server.BroadcastTo("sync", "block", "0000000000000000002d5e70c35ca91068a07a1daa5c553313797cde128e3389");
         }
-    }()
+	}()
+	
+
+    config := config.GetConfiguration()
+	logging.Info.Println("Using backend base URL:", config.BackendBaseUrl)
 
 	listenErr := http.ListenAndServe(":3000", nil)
     if listenErr != nil {
