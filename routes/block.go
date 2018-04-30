@@ -24,7 +24,7 @@ type BlockResponse struct {
 	Tx                []string              `json:"tx"`
 	Time              int64                 `json:"time"`
 	Nonce             int64                 `json:"nonce"`
-	Bits              string                `json:"bits"`
+	Bits              int64                 `json:"bits"`
 	Difficulty        float64               `json:"difficulty"`
 	ChainWork         string                `json:"chainwork"`
 	Confirmations     int                   `json:"confirmations"`
