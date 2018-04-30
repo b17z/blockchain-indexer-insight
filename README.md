@@ -7,14 +7,14 @@ This thing is under development, and far from ready. Feel free to pitch in.
 ### Websocket implementation
 
 | Websocket   | Dummy | Working |
-|=============|:=====:|:=======:|
+|-------------|:-----:|:-------:|
 | New TX      | yes   | yes     |
 | New block   | yes   | yes     |
 
 ### REST API implementation
 
 | API         | Dummy | Working |
-|=============|:=====:|:=======:|
+|-------------|:-----:|:-------:|
 | ```/addr/{address}``` | yes | no |    
 | ```/addr/{address}/``` | yes | no |   
 | ```/addr/{address}/utxo``` | yes | no |    
