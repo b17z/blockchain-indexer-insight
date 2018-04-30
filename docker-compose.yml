@@ -1,20 +1,70 @@
 version: "2"
 services:
 
-  insight-ui:
-    image: insight-nginx
+  vertcoind-main:
+    image: vertcoind
+    restart: always
+    expose:
+      - "8332"
+      - "8333"
+    ports:
+      - "5889:5889"
+    volumes:
+      - ./data/vtc/main/coind:/data
+    command: -rpcuser=middleware -rpcpassword=middleware -rpcallowip=0.0.0.0/0 -rpcport=8332
+    networks:
+      insight-net:
+        ipv4_address: 172.128.238.5
+
+  blkidx-main:
+    image: blkidx
+    depends_on:
+      - vertcoind-main
+    restart: always
+    environment:
+      - COIND_HOST=vertcoind-main
+    expose:
+      - "8888"
+    volumes:
+      - ./data/vtc/main/coind/blocks:/blocks
+      - ./data/vtc/main/index:/index
+      - ./coins:/coins
+    command: --coinParams=/coins/vertcoin-mainnet.json
+    networks:
+      insight-net:
+        ipv4_address: 172.128.238.4
+
+  blkidx-insight-ui:
+    image: blkidx-insight-ui
+    depends_on:
+      - blkidx-main
+      - blkidx-insight
     restart: always
     expose:
       - "80"
-    
+    networks:
+      insight-net:
+        ipv4_address: 172.128.238.2
 
-  insight-wrapper:
-    image: insight-blkidx
+  blkidx-insight:
+    image: blkidx-insight
+    depends_on:
+      - blkidx-main
     restart: always
     expose: 
       - "3000"
+    environment:
+      - INSIGHTWRAPPER_BACKENDBASEURL=http://blkidx-main:8888/
+    networks:
+      insight-net:
+        ipv4_address: 172.128.238.3
 
-networks:    
-  default:
-    external:
-      name: insight-network
+
+networks:
+  insight-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.128.238.0/24
+        gateway: 172.128.238.1
