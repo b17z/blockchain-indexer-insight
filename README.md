@@ -4,6 +4,12 @@ Insight compatible API wrapper for Blockchain Indexer
 ## Status
 This thing is under development, and far from ready. Feel free to pitch in.
 
+|Websocket    | Dummy | Working |
+|=============|=======|=========|
+| New TX      | yes   | yes     |
+| New block   | yes   | yes     |
+
+
 |API          | Dummy | Working |
 |=============|=======|=========|
 |```/addr/{address}```| yes | no |    
@@ -32,3 +38,5 @@ This thing is under development, and far from ready. Feel free to pitch in.
 |```/rawtx/{txid}```| yes | no 
 |```/tx/send```| yes | no 
 |```/messages/verify```| yes | no | 
+
+
