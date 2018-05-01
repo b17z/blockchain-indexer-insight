@@ -27,7 +27,7 @@ This thing is under development, and far from ready. Feel free to pitch in.
 | ```/addr/{address}/totalSent``` | yes | no |    
 | ```/addr/{address}/unconfirmedBalance``` | yes | no |   
 | ```/blocks``` | yes | yes |
-| ```/block/{hash}``` | yes | partly |    
+| ```/block/{hash}``` | yes | yes |    
 | ```/rawblock/{hash}``` | yes | no |    
 | ```/block-index/{height}``` | yes | no |  
 | ```/utils/estimatefee``` | yes | no | 
@@ -36,7 +36,8 @@ This thing is under development, and far from ready. Feel free to pitch in.
 | ```/version``` | yes | no |
 | ```/status``` | yes | no |
 | ```/peer``` | yes | no |
-| ```/txs``` | yes | no |
+| ```/txs?block=&pageNum=``` | yes | yes |
+| ```/txs?address=``` | no | no |
 | ```/tx/{txid}``` | yes | yes |
 | ```/rawtx/{txid}``` | yes | no 
 | ```/tx/send``` | yes | no 

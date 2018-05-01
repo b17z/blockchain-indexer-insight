@@ -29,7 +29,7 @@ type BlockResponse struct {
 	ChainWork         string                `json:"chainwork"`
 	Confirmations     int                   `json:"confirmations"`
 	PreviousBlockHash string                `json:"previousblockhash"`
-	Reward            float32               `json:"reward"`
+	Reward            float64               `json:"reward"`
 	IsMainChain       bool                  `json:"isMainChain"`
 	PoolInfo          BlockResponsePoolInfo `json:"poolInfo"`
 }
@@ -62,6 +62,9 @@ func Block(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	record.IsMainChain = true
+	record.Reward = getReward(record.Height)
+
 	js, err := json.Marshal(record)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -70,4 +73,21 @@ func Block(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
+}
+
+func getReward(nHeight int) float64 {
+
+	halvings := nHeight / 840000
+	// Force block reward to zero when right shift is undefined.
+	if halvings >= 64 {
+		return float64(0)
+	}
+
+	nSubsidy := float64(50)
+	for i := 0; i < halvings; i++ {
+		nSubsidy /= 2
+	}
+
+	return nSubsidy
+
 }
